@@ -46,6 +46,7 @@ from rvt.utils.peract_utils import (
 # new train takes the dataset as input
 def train(agent, dataset, training_iterations, rank=0):
     agent.train()
+    
     log = defaultdict(list)
 
     data_iter = iter(dataset)
@@ -222,7 +223,7 @@ def experiment(rank, cmd_args, devices, port):
         if ddp:
             rvt = DDP(rvt, device_ids=[device])
 
-        agent = rvt_agent.RVTAgent(
+        agent = rvt_agent.RVTAgent( #初始化一个agent
             network=rvt,
             image_resolution=[IMAGE_SIZE, IMAGE_SIZE],
             add_lang=mvt_cfg.add_lang,
@@ -308,4 +309,11 @@ if __name__ == "__main__":
     devices = [int(x) for x in devices]
 
     port = (random.randint(0, 3000) % 3000) + 27000
+    
     mp.spawn(experiment, args=(cmd_args, devices, port), nprocs=len(devices), join=True)
+    # 这里的multiprocess如何汇总呢？ 你在不同的地方train，怎么汇总
+
+
+
+# python train.py --exp_cfg_path configs/rvt2.yaml --mvt_cfg_path mvt/configs/rvt2.yaml --device 0,1,2,3,4,5,6,7 
+# python train.py --exp_cfg_path configs/rvt.yaml --device 0,1,2,3,4,5,6,7

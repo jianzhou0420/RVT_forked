@@ -28,6 +28,7 @@ from rvt.utils.dataset import _clip_encode_text
 from rvt.utils.lr_sched_utils import GradualWarmupScheduler
 
 
+
 def eval_con(gt, pred):
     assert gt.shape == pred.shape, print(f"{gt.shape} {pred.shape}")
     assert len(gt.shape) == 2
